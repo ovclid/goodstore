@@ -74,35 +74,56 @@
             <div style="font-style: italic; color: cadetblue;"> ㅇ  위치 정보 안내<br>
                 &nbsp;&nbsp;  - 스마트폰 : 지도의 원하는 위치를 1초간 눌러주세요. <br>
                 &nbsp;&nbsp;  - PC : 마우스 오른쪽 버튼 클릭하세요. 
-            </div>
         </div>
-        <p></p>
-        <div id="map" style="width:100%;height:650px;"></div>
-        
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=56dd36038680e4d6f7b1cbc67b011a06&libraries=services"></script>
-        <script type="text/javascript" src="market_info_Main.js"></script>
-        <script type="text/javascript" src="market_info_Middle.js"></script>
-        <script type="text/javascript" src="market_info_East.js"></script>
-        <script type="text/javascript" src="market_info_West.js"></script>
-        <script type="text/javascript" src="market_info_North.js"></script>
-        <script type="text/javascript" src="market_info_South.js"></script>
-        <script type="text/javascript" src="market_parking_lot.js"></script>
-        <script type="text/javascript" src="market_onnuri.js"></script>
-        <script type="text/javascript" src="market_goodstore.js"></script>
+    </div>
+    <p></p>
+    <div id="map" style="width:100%;height:650px;"></div>
+	<p>
+		<button onclick="hideMarkers()">마커 감추기</button>
+		<button onclick="showMarkers()">마커 보이기</button>
+	</p> 
+	    
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=56dd36038680e4d6f7b1cbc67b011a06&libraries=services"></script>
+	<script type="text/javascript" src="market_info_Main.js"></script>
+	<script type="text/javascript" src="market_info_Middle.js"></script>
+	<script type="text/javascript" src="market_info_East.js"></script>
+	<script type="text/javascript" src="market_info_West.js"></script>
+	<script type="text/javascript" src="market_info_North.js"></script>
+	<script type="text/javascript" src="market_info_South.js"></script>
+	<script type="text/javascript" src="market_parking_lot.js"></script>
+	<script type="text/javascript" src="market_onnuri.js"></script>
+	<script type="text/javascript" src="market_goodstore.js"></script>
 	<script type="text/javascript" src="market_info_desc.js"></script>	    
-	    
-	    
-        <script>
-            //var base_center = new kakao.maps.LatLng(36.858351739006984, 127.44549719302887)
-            let base_Lat =   36.62800617644608;  // 청주(36.62800617644608)   음성무극시장(36.9916485888649;) 영동전통시장(36.17502542411789;) 
-            let base_Lng =  127.48765858859254;   // 청주(127.48765858859254)   음성무극시장(127.596105990174;)    영동전통시장(127.77580277515723;)
+	    	    
+    <script>
 
-	    function setPosition(position) {
-                base_Lat = position.coords.latitude;
-                base_Lng = position.coords.longitude;
-
-                console.log(position.coords.latitude)
-                console.log(position.coords.longitude)
+		// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
+		function setMarkers(map) {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(map);
+			}            
+		}
+			
+		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
+		function showMarkers() {
+			setMarkers(map)    
+		}
+		
+		// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
+		function hideMarkers() {
+			setMarkers(null);    
+		}
+	
+		//var base_center = new kakao.maps.LatLng(36.858351739006984, 127.44549719302887)
+		let base_Lat =   36.62800617644608;  // 청주(36.62800617644608)   음성무극시장(36.9916485888649;) 영동전통시장(36.17502542411789;) 
+		let base_Lng =  127.48765858859254;   // 청주(127.48765858859254)   음성무극시장(127.596105990174;)    영동전통시장(127.77580277515723;)
+	
+		function setPosition(position) {
+			base_Lat = position.coords.latitude;
+			base_Lng = position.coords.longitude;
+	
+			console.log(position.coords.latitude)
+			console.log(position.coords.longitude)
 
 		base_center = new kakao.maps.LatLng(base_Lat, base_Lng);
 		map.setCenter(base_center)
