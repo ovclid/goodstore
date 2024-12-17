@@ -272,14 +272,14 @@
 
             	kakao.maps.event.addListener(circle, 'click', function(mouseEvent) {  
 	                var latlng = mouseEvent.latLng;
-	                console.log("test")
-	                console.log(latlng.toString());      
+	                //console.log("test")
+	                //console.log(latlng.toString());      
 	               
 	                min_value = 9;
 	                min_index = -1;
 	                for (var i = 0; i < onnuri_reg_market.length ; i++) { 
-	                    console.log(mouseEvent.latLng["Ma"])
-	                    console.log(onnuri_reg_list[onnuri_reg_market[i]][0])
+	                    //console.log(mouseEvent.latLng["Ma"])
+	                    //console.log(onnuri_reg_list[onnuri_reg_market[i]][0])
 	                    x = mouseEvent.latLng["Ma"] - onnuri_reg_list[onnuri_reg_market[i]][0];
 	                    y = mouseEvent.latLng["La"] - onnuri_reg_list[onnuri_reg_market[i]][1];
 	                    value = x*x + y*y;
@@ -287,13 +287,13 @@
 	                        min_value = value;
 	                        min_index = i;
 	                    }
-	                    console.log(x*x + y*y)
+	                    //console.log(x*x + y*y)
 	                };
 	                
-	                console.log(min_value)
-	                console.log(min_index)
-	                console.log(onnuri_reg_market[min_index]);
-	                console.log(onnuri_reg_list[onnuri_reg_market[min_index]]);
+	                //console.log(min_value)
+	                //console.log(min_index)
+	                //console.log(onnuri_reg_market[min_index]);
+	                //console.log(onnuri_reg_list[onnuri_reg_market[min_index]]);
 	
 	                content_base = onnuri_reg_market[min_index] + "(" + onnuri_reg_list[onnuri_reg_market[min_index]][2] + ")";
 			content = '<div class="click_text">' + '<address> <a href = https://map.kakao.com/link/to/' 
@@ -317,26 +317,26 @@
 	    for (var i = 0; i < goodstore_reg_market.length ; i++) { 
 		var circle = new kakao.maps.Circle({
 	    		center : new kakao.maps.LatLng(goodstore_reg_list[goodstore_reg_market[i]][0], goodstore_reg_list[goodstore_reg_market[i]][1]),  // 원의 중심좌표 입니다 
-	    		radius: 3, // 미터 단위의 원의 반지름입니다 
+	    		radius: 8, // 미터 단위의 원의 반지름입니다 
 	    		strokeWeight: 1, // 선의 두께입니다 
-	    		strokeColor: '#FF00FF', // 선의 색깔입니다
+	    		strokeColor: '#0066FF', // 선의 색깔입니다
 	    		strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
 	    		strokeStyle: 'line', // 선의 스타일 입니다
 	    		//fillColor: '#CFE7FF', // 채우기 색깔입니다
-        		            fillColor: '#0066FF', // 채우기 색깔입니다
+        		fillColor: '#0066FF', // 채우기 색깔입니다
 	    		fillOpacity: 0.7  // 채우기 불투명도 입니다   
 		    }); 
 
             	kakao.maps.event.addListener(circle, 'click', function(mouseEvent) {  
 	                var latlng = mouseEvent.latLng;
-	                console.log("test")
-	                console.log(latlng.toString());      
+	                
+	                //console.log(latlng.toString());      
 	               
 	                min_value = 9;
 	                min_index = -1;
 	                for (var i = 0; i < goodstore_reg_market.length ; i++) { 
-	                    console.log(mouseEvent.latLng["Ma"])
-	                    console.log(goodstore_reg_list[goodstore_reg_market[i]][0])
+	                    //console.log(mouseEvent.latLng["Ma"])
+	                    //console.log(goodstore_reg_list[goodstore_reg_market[i]][0])
 	                    x = mouseEvent.latLng["Ma"] - goodstore_reg_list[goodstore_reg_market[i]][0];
 	                    y = mouseEvent.latLng["La"] - goodstore_reg_list[goodstore_reg_market[i]][1];
 	                    value = x*x + y*y;
@@ -344,13 +344,13 @@
 	                        min_value = value;
 	                        min_index = i;
 	                    }
-	                    console.log(x*x + y*y)
+	                    //console.log(x*x + y*y)
 	                };
 	                
-	                console.log(min_value)
-	                console.log(min_index)
-	                console.log(goodstore_reg_market[min_index]);
-	                console.log(goodstore_reg_list[goodstore_reg_market[min_index]]);
+	                //console.log(min_value)
+	                //console.log(min_index)
+	                //console.log(goodstore_reg_market[min_index]);
+	                //console.log(goodstore_reg_list[goodstore_reg_market[min_index]]);
 	
 	                content_base = goodstore_reg_market[min_index] + "(" + goodstore_reg_list[goodstore_reg_market[min_index]][2] + ")";
 			content = '<div class="click_text">' + '<address> <a href = https://map.kakao.com/link/to/' 
