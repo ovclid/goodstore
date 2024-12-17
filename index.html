@@ -95,24 +95,6 @@
 	<script type="text/javascript" src="market_info_desc.js"></script>	    
 	    	    
     <script>
-		var goodstore_markers = [];
-		// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
-		function setMarkers(map) {
-			for (var i = 0; i < goodstore_markers.length; i++) {
-				goodstore_markers[i].setMap(map);
-			}            
-		}
-			
-		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
-		function showMarkers() {
-			setMarkers(map)    
-		}
-		
-		// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
-		function hideMarkers() {
-			setMarkers(null);    
-		}
-	
 		//var base_center = new kakao.maps.LatLng(36.858351739006984, 127.44549719302887)
 		let base_Lat =   36.62800617644608;  // 청주(36.62800617644608)   음성무극시장(36.9916485888649;) 영동전통시장(36.17502542411789;) 
 		let base_Lng =  127.48765858859254;   // 청주(127.48765858859254)   음성무극시장(127.596105990174;)    영동전통시장(127.77580277515723;)
@@ -332,8 +314,9 @@
 
 
 		
-            // 충북도 착한가게
-            var goodstore_reg_market = Object.keys(goodstore_reg_list);
+        // 충북도 착한가게
+		var goodstore_markers = [];
+        var goodstore_reg_market = Object.keys(goodstore_reg_list);
 	    for (var i = 0; i < goodstore_reg_market.length ; i++) { 
 		var circle = new kakao.maps.Circle({
 	    		center : new kakao.maps.LatLng(goodstore_reg_list[goodstore_reg_market[i]][0], goodstore_reg_list[goodstore_reg_market[i]][1]),  // 원의 중심좌표 입니다 
@@ -546,6 +529,25 @@
                     }
                 });    
             }
+
+		
+		// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
+		function setMarkers(map) {
+			for (var i = 0; i < goodstore_markers.length; i++) {
+				goodstore_markers[i].setMap(map);
+			}            
+		}
+			
+		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
+		function showMarkers() {
+			setMarkers(map)    
+		}
+		
+		// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
+		function hideMarkers() {
+			setMarkers(null);    
+		}
+		
         </script>
     </div>
 </body>
