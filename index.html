@@ -96,11 +96,11 @@
 	<script type="text/javascript" src="market_info_desc.js"></script>	    
 	    	    
     <script>
-
+		var goodstore_markers = [];
 		// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
 		function setMarkers(map) {
 			for (var i = 0; i < markers.length; i++) {
-				markers[i].setMap(map);
+				goodstore_markers[i].setMap(map);
 			}            
 		}
 			
@@ -144,7 +144,7 @@
                 })
             }
 
-	    // 뒤의 코드가 실행되고(지도가 그려지고) 나서 나중에 천천히 적용됨
+	    	// 뒤의 코드가 실행되고(지도가 그려지고) 나서 나중에 천천히 적용됨
             //navigator.geolocation.getCurrentPosition(success = setPosition, error = undefined, options = undefined);
 
             let base_center = new kakao.maps.LatLng(base_Lat, base_Lng);
@@ -347,7 +347,9 @@
         		fillColor: '#0066FF', // 채우기 색깔입니다
 	    		fillOpacity: 0.7  // 채우기 불투명도 입니다   
 		    }); 
-
+				
+				goodstore_markers.push(circle);
+			
             	kakao.maps.event.addListener(circle, 'click', function(mouseEvent) {  
 	                var latlng = mouseEvent.latLng;
 	                
