@@ -103,7 +103,8 @@
 		//var base_center = new kakao.maps.LatLng(36.858351739006984, 127.44549719302887)
 		let base_Lat =   36.62800617644608;  // 청주(36.62800617644608)   음성무극시장(36.9916485888649;) 영동전통시장(36.17502542411789;) 
 		let base_Lng =  127.48765858859254;   // 청주(127.48765858859254)   음성무극시장(127.596105990174;)    영동전통시장(127.77580277515723;)
-	
+
+		/*
 		function setPosition(position) {
 			base_Lat = position.coords.latitude;
 			base_Lng = position.coords.longitude;
@@ -132,7 +133,8 @@
 
 		// 뒤의 코드가 실행되고(지도가 그려지고) 나서 나중에 천천히 적용됨
 		//navigator.geolocation.getCurrentPosition(success = setPosition, error = undefined, options = undefined);
-
+		*/
+		
 		let base_center = new kakao.maps.LatLng(base_Lat, base_Lng);
 		var mapContainer = document.getElementById('map');
 		var mapOption = {
@@ -145,7 +147,6 @@
 		var mapTypeControl = new kakao.maps.MapTypeControl();    
 		var polygonPath = Object.assign({}, polygonPath_Main, polygonPath_Middle, polygonPath_East, polygonPath_West, polygonPath_North, polygonPath_South);
 		var markers_list = [];
-
 		var market_polygon_markers = [];
 	
 		// 인포윈도우 생성
@@ -316,12 +317,11 @@
 	    };
 
 
-		
         // 충북도 착한가게
 		var goodstore_markers = [];
         var goodstore_reg_market = Object.keys(goodstore_reg_list);
 	    for (var i = 0; i < goodstore_reg_market.length ; i++) { 
-		var circle = new kakao.maps.Circle({
+			var circle = new kakao.maps.Circle({
 	    		center : new kakao.maps.LatLng(goodstore_reg_list[goodstore_reg_market[i]][0], goodstore_reg_list[goodstore_reg_market[i]][1]),  // 원의 중심좌표 입니다 
 	    		radius: 8, // 미터 단위의 원의 반지름입니다 
 	    		strokeWeight: 1, // 선의 두께입니다 
@@ -333,205 +333,184 @@
 	    		fillOpacity: 0.7  // 채우기 불투명도 입니다   
 		    }); 
 				
-				goodstore_markers.push(circle);
-			
-            	kakao.maps.event.addListener(circle, 'click', function(mouseEvent) {  
-	                var latlng = mouseEvent.latLng;
-	                
-	                //console.log(latlng.toString());      
-	               
-	                min_value = 9;
-	                min_index = -1;
-	                for (var i = 0; i < goodstore_reg_market.length ; i++) { 
-	                    //console.log(mouseEvent.latLng["Ma"])
-	                    //console.log(goodstore_reg_list[goodstore_reg_market[i]][0])
-	                    x = mouseEvent.latLng["Ma"] - goodstore_reg_list[goodstore_reg_market[i]][0];
-	                    y = mouseEvent.latLng["La"] - goodstore_reg_list[goodstore_reg_market[i]][1];
-	                    value = x*x + y*y;
-	                    if (min_value > value){
-	                        min_value = value;
-	                        min_index = i;
-	                    }
-	                    //console.log(x*x + y*y)
-	                };
-	                
-	                //console.log(min_value)
-	                //console.log(min_index)
-	                //console.log(goodstore_reg_market[min_index]);
-	                //console.log(goodstore_reg_list[goodstore_reg_market[min_index]]);
-	
-	                content_base = goodstore_reg_market[min_index] + "(" + goodstore_reg_list[goodstore_reg_market[min_index]][2] + ")";
-			content = '<div class="click_text">' + '<address> <a href = https://map.kakao.com/link/to/' 
+			goodstore_markers.push(circle);
+		
+			kakao.maps.event.addListener(circle, 'click', function(mouseEvent) {  
+				var latlng = mouseEvent.latLng;
+				
+				min_value = 9;
+				min_index = -1;
+				for (var i = 0; i < goodstore_reg_market.length ; i++) { 
+					x = mouseEvent.latLng["Ma"] - goodstore_reg_list[goodstore_reg_market[i]][0];
+					y = mouseEvent.latLng["La"] - goodstore_reg_list[goodstore_reg_market[i]][1];
+					value = x*x + y*y;
+					if (min_value > value){
+						min_value = value;
+						min_index = i;
+					}
+					//console.log(x*x + y*y)
+				};
+				
+				content_base = goodstore_reg_market[min_index] + "(" + goodstore_reg_list[goodstore_reg_market[min_index]][2] + ")";
+				content = '<div class="click_text">' + '<address> <a href = https://map.kakao.com/link/to/' 
 	                            + goodstore_reg_market[min_index] + ',' + mouseEvent.latLng["Ma"] + ',' + mouseEvent.latLng["La"] + ">" + 
 	                            content_base + '</a>' + '</address> </div>';
 			    
-	                var infowindow = new kakao.maps.InfoWindow({
+	            var infowindow = new kakao.maps.InfoWindow({
 	                    map: map, // 인포윈도우가 표시될 지도
 	                    position : mouseEvent.latLng, 
 	                    content : content,
 	                    removable : true
-	                });
+	            });
 	        });
-		circle.setMap(map); 
+			circle.setMap(map); 
 	    };		    
 		
-            map.setCenter(base_center)
+		//map.setCenter(base_center)
+		var geocoder = new kakao.maps.services.Geocoder();
 
-            var geocoder = new kakao.maps.services.Geocoder();
+		function searchDetailAddrFromCoords(coords, callback) {
+			geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
 
-            function searchDetailAddrFromCoords(coords, callback) {
-                geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+		}
 
-            }
-
-            // 지도를 클릭하면 해당 위치에 마크 생성(내비게이션 연결)
-            kakao.maps.event.addListener(map, 'rightclick', function(mouseEvent) {        
-                var detailAddr = '';
-                searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
-                    //console.log("마우스 이벤트 처리 시도");
-                    if (status === kakao.maps.services.Status.OK) {
-                        detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
-                        detailAddr += '<div>지번주소 : ' + result[0].address.address_name + '</div>';
-                        //console.log(detailAddr);
-
-                        var latlng = mouseEvent.latLng; 
-                        var message = '위경도 : (' + latlng.getLat() + ', ' + latlng.getLng() + ')';
-                        message = detailAddr + message + '<br>';
-                        console.log(message);
-    
-                        var newItem = document.createElement("div");
-                        newItem.innerHTML = message;
-                        
-                        var list_ele = document.getElementById("list")
-                        list_ele.innerHTML = '';
-                        list_ele.appendChild(newItem);
-
-                        list_ele.scrollTop = list_ele.scrollHeight;
-                        
-                        setMarkers(null);
-                        var coords = new kakao.maps.LatLng(latlng.getLat(), latlng.getLng()); 
-                        var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords
-                        });
-                        markers_list.push(marker);
-
-                         // 커스텀 오버레이 생성
-                        
-                        //var detail_content = '<div class = "search_overlay">' + result[0].address.address_name + '</div>';
-
-
-                        var detail_content = '<div class="search_overlay">' + '<address> <a href = https://map.kakao.com/link/to/' 
-                            + result[0].address.address_name.replaceAll(' ', '') + ',' + latlng.getLat() + ',' + latlng.getLng() + ">" + 
-                            result[0].address.address_name + '</a>' + '</address> </div>';
-
-                        var customOverlay = new kakao.maps.CustomOverlay({
-                            map: map,
-                            position:coords,
-                            content: detail_content,                    
-                            yAnchor: 3.0
-                        })
-                        markers_list.push(customOverlay);
-                        //map.setCenter(coords);
-
-
-
-                    }
-                    else{
-                        console.log("실패: ");
-                        
-                    }
-                });
+        // 지도를 클릭하면 해당 위치에 마크 생성(내비게이션 연결)
+		kakao.maps.event.addListener(map, 'rightclick', function(mouseEvent) {        
+			var detailAddr = '';
+			
+			searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+				//console.log("마우스 이벤트 처리 시도");
+					if (status === kakao.maps.services.Status.OK) {
+						detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+						detailAddr += '<div>지번주소 : ' + result[0].address.address_name + '</div>';
+						//console.log(detailAddr);
+	
+						var latlng = mouseEvent.latLng; 
+						var message = '위경도 : (' + latlng.getLat() + ', ' + latlng.getLng() + ')';
+						message = detailAddr + message + '<br>';
+						console.log(message);
+	
+						var newItem = document.createElement("div");
+						newItem.innerHTML = message;
+						
+						var list_ele = document.getElementById("list")
+						list_ele.innerHTML = '';
+						list_ele.appendChild(newItem);
+	
+						list_ele.scrollTop = list_ele.scrollHeight;
+						
+						setMarkers(null);
+						var coords = new kakao.maps.LatLng(latlng.getLat(), latlng.getLng()); 
+						var marker = new kakao.maps.Marker({
+							map: map,
+							position: coords
+						});
+						markers_list.push(marker);
+	
+						// 커스텀 오버레이 생성
+						//var detail_content = '<div class = "search_overlay">' + result[0].address.address_name + '</div>';
+						var detail_content = '<div class="search_overlay">' + '<address> <a href = https://map.kakao.com/link/to/' 
+							+ result[0].address.address_name.replaceAll(' ', '') + ',' + latlng.getLat() + ',' + latlng.getLng() + ">" + 
+							result[0].address.address_name + '</a>' + '</address> </div>';
+	
+						var customOverlay = new kakao.maps.CustomOverlay({
+							map: map,
+							position:coords,
+							content: detail_content,                    
+							yAnchor: 3.0
+						})
+						markers_list.push(customOverlay);
+						//map.setCenter(coords);
+					}
+					else{
+						console.log("실패: ");
+						
+					}
+            	});
             });
 
-            // 표시된 시장 목록중 하나를 선택하면 해당 시장으로 좌표 이동
-            function goto_address () {
-                //console.log(this.innerText)
-                //console.log("market_name", this.innerText);
-                //var coords = polygonPath[this.innerText][0];
-                map.setCenter(polygonPath[this.innerText][0]);
-            }
+        // 표시된 시장 목록중 하나를 선택하면 해당 시장으로 좌표 이동
+        function goto_address () {
+			//console.log(this.innerText)
+			//console.log("market_name", this.innerText);
+			//var coords = polygonPath[this.innerText][0];
+			map.setCenter(polygonPath[this.innerText][0]);
+        }
 
-            function searchAddress() {
-                document.activeElement.blur();  // 주소 검색 input 에 대한 포커스 릴리스 -> 스마트폰 불편
+        function searchAddress() {
+			document.activeElement.blur();  // 주소 검색 input 에 대한 포커스 릴리스 -> 스마트폰 불편
 
-                var list_ele = document.getElementById("list");
-                list_ele.innerHTML = '';
+			var list_ele = document.getElementById("list");
+			list_ele.innerHTML = '';
 
-                var newItem = document.createElement("div");
-                newItem.innerHTML = document.getElementById("box").value;
-                
-                var address = document.getElementById("box").value;
-                if (address == '') {
-                    address = "진천읍 중앙동7길 20";
-                }
-                
-                
-                // 주소 검색 전 전통시장 이름과 유사성 체크 
-                // 유사(include)하면 유사한 시장명 표시, 동일하면 그것으로 중심자표 이동
+			var newItem = document.createElement("div");
+			newItem.innerHTML = document.getElementById("box").value;
+			
+			var address = document.getElementById("box").value;
+			if (address == '') {
+				address = "진천읍 중앙동7길 20";
+			}
+						
+			// 주소 검색 전 전통시장 이름과 유사성 체크 
+			// 유사(include)하면 유사한 시장명 표시, 동일하면 그것으로 중심자표 이동
+			var similar_market_found = false;
+			for (var i = 0 ; i < market.length; i++) {
+				if ( (market[i].includes(address)) && !(market[i].includes("구역")) ) {   // 시장 이름에 구역이 없어야 함
+					var newItem = document.createElement("div");
+					newItem.innerHTML = market[i];
+					newItem.onclick = goto_address;
+					
+					list_ele.appendChild(newItem);
+					similar_market_found = true;
+				}
 
-                var similar_market_found = false;
-                for (var i = 0 ; i < market.length; i++) {
-                    if ( (market[i].includes(address)) && !(market[i].includes("구역")) ) {   // 시장 이름에 구역이 없어야 함
-                        var newItem = document.createElement("div");
-                        newItem.innerHTML = market[i];
-                        newItem.onclick = goto_address;
-                        
+				if ( market[i] == address) {
+					var coords = polygonPath[market[i]][0];
+					map.setCenter(coords);
 
-                        list_ele.appendChild(newItem);
-                        similar_market_found = true;
-                    }
+					//similar_market_found = false;
+					return;
+				}
+			}
+			
+			if (similar_market_found) {
+				return
+			}
+			
+			// 주소로 좌표 검색
+			var geocoder = new kakao.maps.services.Geocoder();
+			geocoder.addressSearch(address, function(result, status) {
+				if (status === kakao.maps.services.Status.OK) {
+					var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+					setMarkers(null);
+					var marker = new kakao.maps.Marker({
+						map: map,
+						position: coords
+					});
+					markers_list.push(marker);
 
-                    if ( market[i] == address) {
-                        var coords = polygonPath[market[i]][0];
-                        map.setCenter(coords);
+					// 커스텀 오버레이 생성
+					var detail_content = '<div class="search_overlay">' + '<address> <a href = https://map.kakao.com/link/to/' 
+						+ address.replaceAll(' ', '') + ',' + result[0].y + ',' + result[0].x + ">" + 
+						address + '</a>' + '</address> </div>';
 
-                        //similar_market_found = false;
-                        return;
-                    }
-                }
-                
-                if (similar_market_found) {
-                    return
-                }
-                
-                // 주소로 좌표 검색
-                var geocoder = new kakao.maps.services.Geocoder();
-                geocoder.addressSearch(address, function(result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                        
-
-                        setMarkers(null);
-
-                        var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords
-                        });
-                        markers_list.push(marker);
-
-                         // 커스텀 오버레이 생성
-                        var detail_content = '<div class="search_overlay">' + '<address> <a href = https://map.kakao.com/link/to/' 
-                            + address.replaceAll(' ', '') + ',' + result[0].y + ',' + result[0].x + ">" + 
-                            address + '</a>' + '</address> </div>';
-
-                        var customOverlay = new kakao.maps.CustomOverlay({
-                            map: map,
-                            position:coords,
-                            //content: '<div class = "search_overlay">' + address + '</div>',                    
-                            content: detail_content,                    
-                            yAnchor: 3.0
-                        })
-                        markers_list.push(customOverlay);
-                        map.setCenter(coords);
-                    } 
-                    else {
-                        var newItem = document.createElement("div");
-                        newItem.innerHTML = document.getElementById("box").value + " : 검색 결과 없습니다.";
-                        document.getElementById("list").appendChild(newItem);
-                    }
-                });    
-            }
+					var customOverlay = new kakao.maps.CustomOverlay({
+						map: map,
+						position:coords,
+						//content: '<div class = "search_overlay">' + address + '</div>',                    
+						content: detail_content,                    
+						yAnchor: 3.0
+					})
+					markers_list.push(customOverlay);
+					map.setCenter(coords);
+				} 
+				else {
+					var newItem = document.createElement("div");
+					newItem.innerHTML = document.getElementById("box").value + " : 검색 결과 없습니다.";
+					document.getElementById("list").appendChild(newItem);
+				}
+			});    
+		}
 
 		// 온누리상품권 가맹점 및 전통시장 구역배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
 		function setMarketMarkers(map) {
@@ -541,8 +520,7 @@
 
 			for (var i = 0; i < market_polygon_markers.length; i++) {
 				market_polygon_markers[i].setMap(map);
-			}  
-			
+			}  	
 		}
 			
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
@@ -555,7 +533,6 @@
 			setMarketMarkers(null);    
 		}
 
-		
 		
 		// 착한가격업소 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
 		function setGPSMarkers(map) {
