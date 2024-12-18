@@ -76,9 +76,14 @@
                 &nbsp;&nbsp;  - PC : 마우스 오른쪽 버튼 클릭하세요. 
         </div>
     </div>
+	<p>
+		<button onclick="hideMarketMarkers()">전통시장 감추기</button>
+		<button onclick="showMarketMarkers()">전통시장 보이기</button>
+    </p>
+	    
     <p>
-		<button onclick="hideMarkers()">착한가게 감추기</button>
-		<button onclick="showMarkers()">착한가게 보이기</button>
+		<button onclick="hideGPSMarkers()">착한가게 감추기</button>  // Godd Price Store
+		<button onclick="showGPSMarkers()">착한가게 보이기</button>
     </p>
     <div id="map" style="width:100%;height:650px;"></div>
 	 
@@ -140,6 +145,9 @@
             var mapTypeControl = new kakao.maps.MapTypeControl();    
             var polygonPath = Object.assign({}, polygonPath_Main, polygonPath_Middle, polygonPath_East, polygonPath_West, polygonPath_North, polygonPath_South);
             var markers_list = [];
+
+			var market_polygon_markers = [];
+		
 	
             // 인포윈도우 생성
             var infowindow = new kakao.maps.InfoWindow({
@@ -161,7 +169,8 @@
                     fillColor: '#A2FF99',           // 채우기 색깔
                     fillOpacity: 0.4                // 채우기 불투명
                 });
-
+				market_polygon_markers.push(polygon);
+				
                 // 지도에 다각형을 표시합니다
                 polygon.setMap(map);
 
@@ -258,9 +267,10 @@
 
 	*/
 	    // 충북중기청 온누리상품권 가맹점
-            var onnuri_reg_market = Object.keys(onnuri_reg_list);
+        var onnuri_reg_market = Object.keys(onnuri_reg_list);
+		var onnuri_store_markers = [];
 	    for (var i = 0; i < onnuri_reg_market.length ; i++) { 
-		var circle = new kakao.maps.Circle({
+			var circle = new kakao.maps.Circle({
 	    		center : new kakao.maps.LatLng(onnuri_reg_list[onnuri_reg_market[i]][0], onnuri_reg_list[onnuri_reg_market[i]][1]),  // 원의 중심좌표 입니다 
 	    		radius: 3, // 미터 단위의 원의 반지름입니다 
 	    		strokeWeight: 1, // 선의 두께입니다 
@@ -272,6 +282,8 @@
 	    		fillOpacity: 0.7  // 채우기 불투명도 입니다   
 		    }); 
 
+			onnuri_store_markers.push(circle)
+			
             	kakao.maps.event.addListener(circle, 'click', function(mouseEvent) {  
 	                var latlng = mouseEvent.latLng;
 	                //console.log("test")
@@ -530,22 +542,45 @@
                 });    
             }
 
+		// 온누리상품권 가맹점 및 전통시장 구역배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
+		function setMarketMarkers(map) {
+			for (var i = 0; i < onnuri_store_markers.length; i++) {
+				onnuri_store_markers[i].setMap(map);
+			}     
+
+			for (var i = 0; i < market_polygon_markers.length; i++) {
+				market_polygon_markers[i].setMap(map);
+			}  
+			
+		}
+			
+		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
+		function showMarketMarkers() {
+			setMarketMarkers(map)    
+		}
 		
-		// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
-		function setMarkers(map) {
+		// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
+		function hideMarketMarkers() {
+			setMarketMarkers(null);    
+		}
+
+		
+		
+		// 착한가격업소 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
+		function setGPSMarkers(map) {
 			for (var i = 0; i < goodstore_markers.length; i++) {
 				goodstore_markers[i].setMap(map);
 			}            
 		}
 			
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
-		function showMarkers() {
-			setMarkers(map)    
+		function showGPSMarkers() {
+			setGPSMarkers(map)    
 		}
 		
 		// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
-		function hideMarkers() {
-			setMarkers(null);    
+		function hideGPSMarkers() {
+			setGPSMarkers(null);    
 		}
 		
         </script>
