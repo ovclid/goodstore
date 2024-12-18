@@ -380,7 +380,7 @@
 			
 			searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
 				//console.log("마우스 이벤트 처리 시도");
-					if (status === kakao.maps.services.Status.OK) {
+					if (status == kakao.maps.services.Status.OK) {
 						detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
 						detailAddr += '<div>지번주소 : ' + result[0].address.address_name + '</div>';
 						//console.log(detailAddr);
@@ -480,7 +480,7 @@
 			// 주소로 좌표 검색
 			var geocoder = new kakao.maps.services.Geocoder();
 			geocoder.addressSearch(address, function(result, status) {
-				if (status === kakao.maps.services.Status.OK) {
+				if (status == kakao.maps.services.Status.OK) {
 					var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 					setMarkers(null);
 					var marker = new kakao.maps.Marker({
